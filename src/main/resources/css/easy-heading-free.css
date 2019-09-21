@@ -1,0 +1,87 @@
+
+.heading-expand-header h1,h2,h3,h4,h5,h6 {
+    display: inline;
+}
+
+.heading-expand-body {
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.heading-expand-header {
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.heading-expand-indent {
+	padding-left:16px;
+}
+
+.expanded-button {
+	background: url("images/expanded-button.png") no-repeat scroll 0 0 transparent;
+	height: 16px;
+	width: 16px;
+	display:inline-block;
+	padding-right:5px;
+}
+
+.collapsed-button {
+	background: url("images/collapsed-button.png") no-repeat scroll 0 0 transparent;
+	height: 16px;
+	width: 16px;
+	display:inline-block;
+	padding-right:5px;
+}
+
+
+/* Style for navigation */
+#eh-navigation-wrapper {
+    position: absolute;
+    right: 20px;
+    top: 80px;
+    height: 100%;
+}
+#eh-navigation {
+	position: fixed;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 120px;
+	right: 20px;
+    width: 180px;
+    margin: 0px;
+    padding: 0px 20px;
+}
+#eh-navigation-content {
+	position: relative;
+}
+#eh-navigation-title {
+    font-size: 16px;
+    font-weight: 700;
+    padding-bottom: 3px;
+}
+#eh-navigation-list {
+	height: calc(100vh - 305px);
+	overflow-y: auto;
+    font-size:14px;
+    margin-top: 0px;
+    padding-left: 0px;
+    list-style: none;
+}
+#eh-navigation-list li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-top:5px;
+}
+#eh-navigation-list a {
+    white-space: nowrap;
+}
+#eh-drag-bar {
+	position: absolute;
+    left: -15px;
+    top: 6px;
+    height: 20px;
+    width: 9px;
+    cursor: col-resize;
+    background-position: right center;
+    background: url("images/icon-grab-handle.svg") no-repeat;
+}

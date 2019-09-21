@@ -1,0 +1,56 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="atlassian-licensing-enabled">false</param>
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+        <!-- <param name="atlassian-licensing-enabled">true</param> -->
+    </plugin-info>
+
+    <xhtml-macro name="easy-heading-free" class="com.binguo.confluence.headingfree.EasyHeadingFree"
+                 icon="/download/resources/${project.groupId}.${project.artifactId}/images/browserLogo.png"
+                 key="easy-heading-free">
+        <category name="formatting" />
+        <parameters>
+            <!-- Set headers to be applied this macro -->
+            <parameter name="selector" type="string" default="h1,h2,h3"></parameter>
+
+            <!-- Navigation -->
+            <parameter name="useNavigation" type="boolean" default="true"></parameter>
+            <parameter name="navigationTitle" type="string" default="Table of Content"></parameter>
+            <parameter name="navigationWidth" type="int" default="230"></parameter>
+            <parameter name="navigationIndent" type="int" default="10"></parameter>
+
+            <!-- Formatting -->
+            <parameter name="headingIndent" type="int" default="20"></parameter>
+
+            <!-- Expanding -->
+            <parameter name="expandOption" type="enum" default="expand-all-by-default">
+                <value name="expand-all-by-default"/>
+                <value name="collapse-all-by-default"/>
+                <value name="disable-expand-collapse"/>
+            </parameter>
+
+        </parameters>
+    </xhtml-macro>
+    <macro key="easy-heading-free-wiki" name="easy-heading-free" class="com.binguo.confluence.headingfree.EasyHeadingFree">
+    </macro>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="easy-heading-free"/>
+    <resource type="download" name="images/" location="/images"/>
+    <!-- add our web resources -->
+    <web-resource key="easy-heading-free-resources" name="easy-heading-free Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="easy-heading-free.css" location="/css/easy-heading-free.css"/>
+        <resource type="download" name="easy-heading-free.js" location="/js/easy-heading-free.js"/>
+        <resource type="download" name="images/" location="/images"/>
+        <context>easy-heading-free</context>
+        <context>viewcontent</context>
+        <context>preview</context>
+    </web-resource>
+
+</atlassian-plugin>
