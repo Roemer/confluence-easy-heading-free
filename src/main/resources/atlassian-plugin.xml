@@ -22,6 +22,11 @@
             <parameter name="navigationTitle" type="string" default="Table of Content"></parameter>
             <parameter name="navigationWidth" type="int" default="230"></parameter>
             <parameter name="navigationIndent" type="int" default="10"></parameter>
+            <parameter name="navigationStyle" type="enum" default="">
+                <value name="expand-all-by-default"/>
+                <value name="collapse-all-by-default"/>
+                <value name="disable-expand-collapse"/>
+            </parameter>
 
             <!-- Formatting -->
             <parameter name="headingIndent" type="int" default="20"></parameter>

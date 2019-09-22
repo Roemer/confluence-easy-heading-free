@@ -4,25 +4,28 @@ var MARGIN_RIGHT_NAVIGATION = 20;
 var SCROLLING_OFFSET_FIX = 100;
 var SCROLLING_ANIMATION_DURATION = 500;
 var SCROLLING_EXPAND_WAIT_TIME = 500;
+var EMPTY_SELECTOR_HEADERS = "h1,h2,h3,h4,h5,h6";
+var selectorPage = "#main";
 var selectorBody = "#main-content";
 var selectorMacro = ".heading-expand";
 var selectorHeaders = "h1,h2,h3";
 
 AJS.toInit(function ($) {
     // Use parameters of the first macro if there are multiple
-    var paras = getParameters($(selectorBody + " " + selectorMacro + ":eq(0)"));
+    var paras = getParameters($(selectorPage + " " + selectorMacro + ":eq(0)"));
+    if (paras.selector == null || paras.selector.trim() == "") {
+        paras.selector = EMPTY_SELECTOR_HEADERS;
+    }
+    selectorHeaders = paras.selector;
     console.log(paras);
+
+    // Update block to all headings
+    $(selectorBody + " " + selectorHeaders).each(function(){
+        processHeadings($(this), paras);
+    });
 
     // It will only use the paras of the first macro block for navigation set up
     addNavigation(paras);
-
-    // Update block to support heading functions
-    console.log($(selectorBody + " " + selectorMacro).length);
-    $(selectorBody + " " + selectorMacro).each(function(){
-        var divContainer = $(this).parent().parent().closest("div");
-        console.log("class name = " + divContainer.attr("class"));
-        processHeadings(divContainer.find(selectorHeaders).eq(0), paras);
-    });
 });
 
 var mouseXPosition;
@@ -39,11 +42,15 @@ function addNavigation(paras) {
 	var divDragBar = $('<div id="eh-drag-bar"></div>');
     var divTitle = $('<div id="eh-navigation-title">' + paras.navigationTitle + '</div>');
     var ulList = $('<ul id="eh-navigation-list"></ul>');
-    $(selectorBody).find(selectorHeaders).each(function(){
-        if ($(this).text().trim() != "") {
-            $('<li><a href="">' + $(this).text() + '</a></li>').appendTo(ulList);
-        }
+
+    // Set indent for each item in side bar
+    $(selectorBody).find(".heading-expand-header").each(function(index){
+        var text = $(this).find(":header").text();
+        var levels = $(this).parents(".heading-expand-body").length;
+        var indent = paras.navigationIndent * levels;
+        $('<li style="padding-left: '+ indent + 'px;"><a href="">' + $(this).text() + '</a></li>').appendTo(ulList);
     });
+
     if (ulList.find("li").length == 0) return;
 	
 	// Bind event for scrolling
@@ -53,13 +60,12 @@ function addNavigation(paras) {
 		// Expand the target heading and scroll to the target heading only once it's completely expanded
 		var index = $(this).parent().index();
 		var expanded = isHeadingExpanded(index);
-		//console.log(expanded);
+
 		if (expanded) {
 			scrollToHeading(index);
 		} else {
 			expandHeading(index);
 			setTimeout(function(){
-				console.log("moving");
 				scrollToHeading(index);
 			}, SCROLLING_EXPAND_WAIT_TIME);
 		}
@@ -146,22 +152,27 @@ function resizeNavigation(xOffset) {
 
 function getParameters(macroBlock) {
     return {
+        selector: macroBlock.find(".hid-selector:eq(0)").val(),
         useNavigation : macroBlock.find(".hid-useNavigation:eq(0)").val() == "true",
         navigationTitle : macroBlock.find(".hid-navigationTitle:eq(0)").val(),
         navigationWidth : Number(macroBlock.find(".hid-navigationWidth:eq(0)").val()),
+        navigationIndent : Number(macroBlock.find(".hid-navigationIndent:eq(0)").val()),
+        headingIndent : Number(macroBlock.find(".hid-headingIndent:eq(0)").val()),
         enableExpandCollapse : macroBlock.find(".hid-enableExpandCollapse:eq(0)").val() == "true",
-        expandAllByDefault : macroBlock.find(".hid-expandAllByDefault:eq(0)").val() == "true",
-        useIndent : macroBlock.find(".hid-useIndent:eq(0)").val() == "true"
+        expandAllByDefault : macroBlock.find(".hid-expandAllByDefault:eq(0)").val() == "true"
     };
 }
 
 // Attention, this is a recursive function
 function processHeadings(h, paras) {
     if (h == null || h.length == 0) return;
+    // Don't process empty headings
     if (h.text().trim() == "") {
         processHeadings(h.next(selectorHeaders), paras);
         return;
     }
+    // Don't process the same heading second time
+    if (h.parent().hasClass("heading-expand-header")) return;
 
     var divHeader = updateHeading(h, paras);
     var divBody = divHeader.next("div.heading-expand-body");
@@ -171,8 +182,6 @@ function processHeadings(h, paras) {
 }
 
 function updateHeading(h, paras){
-    //console.log("header text: " + h.text());
-
 	// Create the body div and move all its sub H elements into it
 	var level = parseInt(h[0].nodeName.substring(1), 10);
     var until = ".heading-expand-end";
@@ -180,9 +189,10 @@ function updateHeading(h, paras){
         if (until != "") until += ",";
         until += "h" + i;
     }
-    var classes = paras.useIndent ? "heading-expand-body heading-expand-indent" : "heading-expand-body";
-    var style = !paras.expandAllByDefault && paras.enableExpandCollapse ? " style='display:none'" : "";
-	$("<div class='" + classes + "' " + style + " ></div>").insertAfter(h);
+    var styleIndent = "padding-left: " + paras.headingIndent + "px;";
+    var style = !paras.expandAllByDefault && paras.enableExpandCollapse ? styleIndent + "display:none;" : styleIndent;
+
+	$("<div class='heading-expand-body' style='" + style + "'></div>").insertAfter(h);
 	h.next("div").each(function(){
 		$(this).nextUntil(until).appendTo($(this));
 	});
