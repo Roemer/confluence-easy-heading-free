@@ -7,7 +7,7 @@ var SCROLLING_EXPAND_WAIT_TIME = 500;
 var EMPTY_SELECTOR_HEADERS = "h1,h2,h3,h4,h5,h6";
 var selectorPage = "#main";
 var selectorBody = "#main-content";
-var selectorMacro = ".heading-expand";
+var selectorMacro = ".easy-heading-free";
 var selectorHeaders = "h1,h2,h3";
 
 AJS.toInit(function ($) {
@@ -184,7 +184,7 @@ function processHeadings(h, paras) {
 function updateHeading(h, paras){
 	// Create the body div and move all its sub H elements into it
 	var level = parseInt(h[0].nodeName.substring(1), 10);
-    var until = ".heading-expand-end";
+    var until = ".easy-heading-free-end";
     for (i = level; i > 0; i--){
         if (until != "") until += ",";
         until += "h" + i;

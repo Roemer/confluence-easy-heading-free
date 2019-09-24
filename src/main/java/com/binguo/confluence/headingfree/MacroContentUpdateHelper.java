@@ -20,7 +20,7 @@ public class MacroContentUpdateHelper {
 
         // Create html for hidden fields for parameters
         return new StringBuilder()
-                .append("<div class='heading-expand'>")
+                .append("<div class='easy-heading-free'>")
                 .append("<input class='hid-selector' type='hidden' value='" + selector.toString() + "' />")
                 .append("<input class='hid-useNavigation' type='hidden' value='" + useNavigation.toString() + "' />")
                 .append("<input class='hid-navigationTitle' type='hidden' value='" + navigationTitle + "' />")
@@ -30,7 +30,7 @@ public class MacroContentUpdateHelper {
                 .append("<input class='hid-enableExpandCollapse' type='hidden' value='" + enableExpandCollapse.toString() + "' />")
                 .append("<input class='hid-expandAllByDefault' type='hidden' value='" + expandAllByDefault.toString() + "' />")
                 .append(bodyContent)
-                .append("</div><div class='heading-expand-end'></div>")
+                .append("</div><div class='easy-heading-free-end'></div>")
                 .toString();
     }
 }
