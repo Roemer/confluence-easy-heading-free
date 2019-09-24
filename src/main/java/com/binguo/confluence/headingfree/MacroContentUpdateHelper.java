@@ -11,6 +11,7 @@ public class MacroContentUpdateHelper {
         Boolean expandAllByDefault = expandOption.equals("expand-all-by-default");
 
         // Get actual parameters to be used in javascript
+        Boolean enabled = map.get("enabled") != null ? map.get("enabled").equals("true") : Constants.DEFAULT_ENABLED;
         String selector = map.get("selector") != null ? map.get("selector"): Constants.DEFAULT_SELECTOR;
         Boolean useNavigation = map.get("useNavigation") != null ? map.get("useNavigation").equals("true") : Constants.DEFAULT_USE_NAVIGATION;
         String navigationTitle = map.get("navigationTitle") != null ? map.get("navigationTitle"): Constants.DEFAULT_NAVIGATION_TITLE;
@@ -21,6 +22,7 @@ public class MacroContentUpdateHelper {
         // Create html for hidden fields for parameters
         return new StringBuilder()
                 .append("<div class='easy-heading-free'>")
+                .append("<input class='hid-enabled' type='hidden' value='" + enabled.toString() + "' />")
                 .append("<input class='hid-selector' type='hidden' value='" + selector.toString() + "' />")
                 .append("<input class='hid-useNavigation' type='hidden' value='" + useNavigation.toString() + "' />")
                 .append("<input class='hid-navigationTitle' type='hidden' value='" + navigationTitle + "' />")

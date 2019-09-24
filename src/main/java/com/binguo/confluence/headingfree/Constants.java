@@ -1,6 +1,8 @@
 package com.binguo.confluence.headingfree;
 
 public class Constants {
+    // Enable/Disable the macro
+    public static final Boolean DEFAULT_ENABLED = true;
     // Heading Selector
     public static final String DEFAULT_SELECTOR = "h1,h2,h3";
     // Floating Table of Content

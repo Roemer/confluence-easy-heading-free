@@ -13,6 +13,7 @@ var selectorHeaders = "h1,h2,h3";
 AJS.toInit(function ($) {
     // Use parameters of the first macro if there are multiple
     var paras = getParameters($(selectorPage + " " + selectorMacro + ":eq(0)"));
+    if (!paras.enabled) return;
     if (paras.selector == null || paras.selector.trim() == "") {
         paras.selector = EMPTY_SELECTOR_HEADERS;
     }
@@ -152,6 +153,7 @@ function resizeNavigation(xOffset) {
 
 function getParameters(macroBlock) {
     return {
+        enabled: macroBlock.find(".hid-enabled:eq(0)").val(),
         selector: macroBlock.find(".hid-selector:eq(0)").val(),
         useNavigation : macroBlock.find(".hid-useNavigation:eq(0)").val() == "true",
         navigationTitle : macroBlock.find(".hid-navigationTitle:eq(0)").val(),

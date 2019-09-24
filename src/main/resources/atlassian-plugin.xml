@@ -14,6 +14,9 @@
                  key="easy-heading-free">
         <category name="formatting" />
         <parameters>
+            <!-- Enable/Disable the macro -->
+            <parameter name="enabled" type="boolean" default="true"></parameter>
+
             <!-- Set headers to be applied this macro -->
             <parameter name="selector" type="string" default="h1,h2,h3"></parameter>
 
@@ -22,11 +25,6 @@
             <parameter name="navigationTitle" type="string" default="Table of Content"></parameter>
             <parameter name="navigationWidth" type="int" default="230"></parameter>
             <parameter name="navigationIndent" type="int" default="10"></parameter>
-            <parameter name="navigationStyle" type="enum" default="">
-                <value name="expand-all-by-default"/>
-                <value name="collapse-all-by-default"/>
-                <value name="disable-expand-collapse"/>
-            </parameter>
 
             <!-- Formatting -->
             <parameter name="headingIndent" type="int" default="20"></parameter>
