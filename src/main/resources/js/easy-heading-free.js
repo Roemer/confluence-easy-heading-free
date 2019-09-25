@@ -34,6 +34,8 @@ var mouseIsDown = false;
 var navigationCreated = false;
 function addNavigation(paras) {
     if (!paras.useNavigation || navigationCreated) return;
+    if ($("#eh-navigation-wrapper").length > 0) return;
+
 
     // Copy all heading text and create a list
     var divContent = $("#content")
@@ -153,7 +155,7 @@ function resizeNavigation(xOffset) {
 
 function getParameters(macroBlock) {
     return {
-        enabled: macroBlock.find(".hid-enabled:eq(0)").val(),
+        enabled: macroBlock.find(".hid-enabled:eq(0)").val() == "true",
         selector: macroBlock.find(".hid-selector:eq(0)").val(),
         useNavigation : macroBlock.find(".hid-useNavigation:eq(0)").val() == "true",
         navigationTitle : macroBlock.find(".hid-navigationTitle:eq(0)").val(),
