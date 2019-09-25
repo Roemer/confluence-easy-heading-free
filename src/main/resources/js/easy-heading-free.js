@@ -46,10 +46,10 @@ function addNavigation(paras) {
 
     // Set indent for each item in side bar
     $(selectorBody).find(".heading-expand-header").each(function(index){
-        var text = $(this).find(":header").text();
+        var text = $(this).find(":header").text().trim();
         var levels = $(this).parents(".heading-expand-body").length;
         var indent = paras.navigationIndent * levels;
-        $('<li style="padding-left: '+ indent + 'px;"><a href="">' + $(this).text() + '</a></li>').appendTo(ulList);
+        $('<li style="padding-left: '+ indent + 'px;"><a href="">' + text + '</a></li>').appendTo(ulList);
     });
 
     if (ulList.find("li").length == 0) return;
