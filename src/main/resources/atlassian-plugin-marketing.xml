@@ -11,14 +11,9 @@
        
       <!-- Describe highlight and cropped highlight image assets, in order. -->
       <highlights>
-        <highlight image="images/highlight1.jpg" cropped="images/highlight1_cropped.jpg"/>
-        <highlight image="images/highlight2.jpg" cropped="images/highlight2_cropped.jpg"/>
-        <highlight image="images/highlight3.jpg" cropped="images/highlight3_cropped.jpg"/>
+        <highlight image="images/highlight1.jpg" />
+        <highlight image="images/highlight2.jpg" />
+        <highlight image="images/highlight3.jpg" />
       </highlights>
-       
-      <!-- Describe additional screenshots you'd like listed on your app listing. --> 
-      <screenshots>
-        <screenshot image="images/screenshot1.jpg"/>
-      </screenshots>
-  
+
 </atlassian-plugin-marketing>
