@@ -9,6 +9,7 @@ var selectorPage = "#main";
 var selectorBody = "#main-content";
 var selectorMacro = ".easy-heading-free";
 var selectorHeaders = "h1,h2,h3";
+var headingPositions = [];
 
 AJS.toInit(function ($) {
     // Use parameters of the first macro if there are multiple
@@ -18,7 +19,7 @@ AJS.toInit(function ($) {
         paras.selector = EMPTY_SELECTOR_HEADERS;
     }
     selectorHeaders = paras.selector;
-    console.log(paras);
+    //console.log(paras);
 
     // Update block to all headings
     $(selectorBody + " " + selectorHeaders).each(function(){
@@ -27,6 +28,13 @@ AJS.toInit(function ($) {
 
     // It will only use the paras of the first macro block for navigation set up
     addNavigation(paras);
+	
+	// Highlight current heading in navigation bar
+	//$(selectorBody).find(".heading-expand-header").each(function(){
+	//	headingPositions.push($(this).offset().top);
+	//});
+	//console.log(headingPositions);
+	$( window ).scroll(highlightCurrentHeading);
 });
 
 var mouseXPosition;
@@ -121,6 +129,33 @@ function addNavigation(paras) {
 	}, true);
 
 	navigationCreated = true;
+}
+
+function highlightCurrentHeading() {
+	if (headingPositions.length == 0) {
+		$(selectorBody).find(".heading-expand-header").each(function(){
+			headingPositions.push($(this).offset().top);
+		});
+	}
+	
+	var scrollTop = $(document).scrollTop();
+	var index = 0;
+	for (i = 0; i<headingPositions.length; i++) {
+		// Compute distance to top for next heading
+		var dist = headingPositions[i] - scrollTop;
+		console.log(i, headingPositions[i], dist);
+
+		if (dist < 50) {
+			index = i;
+		}
+	}
+	
+	// highlight the current heading
+	var previousIndex = $("li.eh-highlight").index();
+	if (previousIndex != index) {
+		$("li.eh-highlight").removeClass("eh-highlight");
+		$("#eh-navigation-list>li:eq(" + index + ")").addClass("eh-highlight");
+	}
 }
 
 function expandHeading(headingIndex) {

@@ -75,6 +75,10 @@
 #eh-navigation-list a {
     white-space: nowrap;
 }
+.eh-highlight {
+	font-weight: bold;
+}
+
 #eh-drag-bar {
 	position: absolute;
     left: -15px;
