@@ -49,16 +49,26 @@ function addNavigation(paras) {
     // Set indent for each item in side bar
     $(selectorBody).find(".heading-expand-header").each(function(index){
         var text = $(this).find(":header").text().trim();
+		var hash = encodeHeadingText($(this).text());
         var levels = $(this).parents(".heading-expand-body").length;
         var indent = paras.navigationIndent * levels;
-        $('<li style="padding-left: '+ indent + 'px;"><a href="">' + text + '</a></li>').appendTo(ulList);
+        $('<li style="padding-left: '+ indent + 'px;"><a href="#' + hash + '">' + text + '</a></li>').appendTo(ulList);
     });
 
     if (ulList.find("li").length == 0) return;
 	
 	// Bind event for scrolling
-	ulList.find("a").click(function(e){
+	ulList.find("a").click(function(event){
 		event.preventDefault();
+
+		// Add hash to the link without jump there directly
+		var hash = "#" + encodeHeadingText($(this).text());
+		if(history.pushState) {
+			history.pushState(null, null, hash);
+		}
+		else {
+			location.hash = hash;
+		}
 		
 		// Expand the target heading and scroll to the target heading only once it's completely expanded
 		var index = $(this).parent().index();
@@ -72,6 +82,8 @@ function addNavigation(paras) {
 				scrollToHeading(index);
 			}, SCROLLING_EXPAND_WAIT_TIME);
 		}
+		
+		return false;
 	});
 	
 	// Set width for navigation
@@ -202,9 +214,10 @@ function updateHeading(h, paras){
 	});
 	
 	// Move header elements into the header div along with the expanding/collapsing icon
+	var headerId = encodeHeadingText(h.text());
 	var buttonClass = paras.expandAllByDefault ? "expanded-button" : "collapsed-button";
 	var buttonHtml = paras.enableExpandCollapse ? "<span class='arrow " + buttonClass + "'></span>" : "";
-	var divHeader = $("<div class='heading-expand-header'>" + buttonHtml + "</div>");
+	var divHeader = $("<div id='"+ headerId +"' class='heading-expand-header'>" + buttonHtml + "</div>");
 	divHeader.insertAfter(h);
 	h.appendTo(divHeader);
 
@@ -220,3 +233,8 @@ function updateHeading(h, paras){
 	return divHeader;
 }
 
+function encodeHeadingText(text) {
+	var result = text.replace(/[&\/\\#\s,+()$~%.'":*?<>{}]/g, '');
+	result = result.substring(0, 100);
+	return result;
+}
