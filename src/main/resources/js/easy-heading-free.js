@@ -30,11 +30,13 @@ AJS.toInit(function ($) {
     addNavigation(paras);
 	
 	// Highlight current heading in navigation bar
-	//$(selectorBody).find(".heading-expand-header").each(function(){
-	//	headingPositions.push($(this).offset().top);
-	//});
-	//console.log(headingPositions);
-	$( window ).scroll(highlightCurrentHeading);
+	$(window).scroll(highlightCurrentHeading);
+
+	// If url include hash and headings are collapsed by default then expand
+	if (!paras.expandAllByDefault && location.hash != '') {
+        var headerId = location.hash.replace("#", "");
+        expandHeading(headerId);
+	}
 });
 
 var mouseXPosition;
@@ -79,18 +81,9 @@ function addNavigation(paras) {
 		}
 		
 		// Expand the target heading and scroll to the target heading only once it's completely expanded
-		var index = $(this).parent().index();
-		var expanded = isHeadingExpanded(index);
+		var headerId = hash.replace("#", "");
+		navigateToHeading(headerId);
 
-		if (expanded) {
-			scrollToHeading(index);
-		} else {
-			expandHeading(index);
-			setTimeout(function(){
-				scrollToHeading(index);
-			}, SCROLLING_EXPAND_WAIT_TIME);
-		}
-		
 		return false;
 	});
 	
@@ -131,21 +124,35 @@ function addNavigation(paras) {
 	navigationCreated = true;
 }
 
+function navigateToHeading(headerId) {
+    var expanded = isHeadingExpanded(headerId);
+
+    if (expanded) {
+        scrollToHeading(headerId);
+    } else {
+        expandHeading(headerId);
+        setTimeout(function(){
+            scrollToHeading(headerId);
+        }, SCROLLING_EXPAND_WAIT_TIME);
+    }
+}
+
 function highlightCurrentHeading() {
 	if (headingPositions.length == 0) {
 		$(selectorBody).find(".heading-expand-header").each(function(){
 			headingPositions.push($(this).offset().top);
 		});
 	}
-	
+
+	var headers = $(selectorBody).find(".heading-expand-header");
 	var scrollTop = $(document).scrollTop();
 	var index = 0;
-	for (i = 0; i<headingPositions.length; i++) {
+	for (i = 0; i<headers.length; i++) {
 		// Compute distance to top for next heading
-		var dist = headingPositions[i] - scrollTop;
-		console.log(i, headingPositions[i], dist);
+		var dist = headers.eq(i).offset().top - scrollTop;
+		//console.log(i, dist, headers.eq(i).attr("id"));
 
-		if (dist < 50) {
+		if (dist <= SCROLLING_OFFSET_FIX) {
 			index = i;
 		}
 	}
@@ -158,10 +165,10 @@ function highlightCurrentHeading() {
 	}
 }
 
-function expandHeading(headingIndex) {
-    var header = $(selectorBody).find(".heading-expand-header").eq(headingIndex);
-	var body = header.next(".heading-expand-body").show();
-	var parentBody = header.closest(".heading-expand-body");
+function expandHeading(headerId) {
+    var divHeader = $(selectorBody).find("#" + headerId);
+	var body = divHeader.next(".heading-expand-body").show();
+	var parentBody = divHeader.closest(".heading-expand-body");
 	
 	var i = 0;
 	while (parentBody.length == 1 && i < 20) {
@@ -170,12 +177,12 @@ function expandHeading(headingIndex) {
 	}
 }
 
-function isHeadingExpanded(headingIndex) {
-    var header = $(selectorBody).find(".heading-expand-header").eq(headingIndex);
-	var body = header.next(".heading-expand-body").show();
+function isHeadingExpanded(headerId) {
+    var divHeader = $(selectorBody).find("#" + headerId);
+	var body = divHeader.next(".heading-expand-body").show();
 	if (body.is(":hidden")) return false;
 	
-	var parentBody = header.closest(".heading-expand-body");
+	var parentBody = divHeader.closest(".heading-expand-body");
 	
 	var i = 0;
 	while (parentBody.length == 1 && i < 20) {
@@ -186,10 +193,9 @@ function isHeadingExpanded(headingIndex) {
 	return true;
 }
 
-function scrollToHeading(headingIndex) {
-	var targetHeading = $(selectorBody).find(selectorHeaders).eq(headingIndex);
-	var position = targetHeading.offset();
-	$('html, body').stop().animate({ scrollTop: position.top - SCROLLING_OFFSET_FIX }, SCROLLING_ANIMATION_DURATION);
+function scrollToHeading(headerId) {
+	var divHeader = $(selectorBody).find("#" + headerId);
+	$('html, body').stop().animate({ scrollTop: divHeader.offset().top - SCROLLING_OFFSET_FIX }, SCROLLING_ANIMATION_DURATION);
 }
 
 function resizeNavigation(xOffset) {
@@ -270,6 +276,6 @@ function updateHeading(h, paras){
 
 function encodeHeadingText(text) {
 	var result = text.replace(/[&\/\\#\s,+()$~%.'":*?<>{}]/g, '');
-	result = result.substring(0, 100);
+	result = "heading-" + result.substring(0, 150);
 	return result;
 }
