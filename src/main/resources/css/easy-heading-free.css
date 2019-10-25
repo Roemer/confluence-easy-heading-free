@@ -1,5 +1,10 @@
 
-.heading-expand-header h1,h2,h3,h4,h5,h6 {
+.heading-expand-header h1,
+.heading-expand-header h2,
+.heading-expand-header h3,
+.heading-expand-header h4,
+.heading-expand-header h5,
+.heading-expand-header h6 {
     display: inline;
 }
 
